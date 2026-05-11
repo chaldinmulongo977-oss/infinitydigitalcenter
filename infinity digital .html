@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinity Digital | Centre de Formation à Kinshasa</title>
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuration Tailwind pour les couleurs personnalisées -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0F172A',
+                        primary: '#3B82F6',
+                        accent: '#06B6D4',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        // Remplacer par ta propre clé publique EmailJS
+        (function() {
+            emailjs.init("c_D8jtClh4q66mUl_");
+        })();
+    </script>
+
+    <style>
+        /* Styles personnalisés (Glassmorphism & Animations) */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px 0 rgba(59, 130, 246, 0.2);
+            border-color: rgba(6, 182, 212, 0.3);
+        }
+
+        .glow-button {
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .glow-button::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+
+        .glow-button:hover::before {
+            left: 100%;
+        }
+
+        .glow-button:hover {
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.6);
+        }
+
+        .glow-text {
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+
+        /* Animations au scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Spinner Loading */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #0F172A;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            border-top-color: #3B82F6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0F172A; }
+        ::-webkit-scrollbar-thumb { background: #3B82F6; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06B6D4; }
+        
+        select option {
+            background-color: #0F172A;
+            color: white;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div class="flex flex-col items-center">
+            <div class="spinner mb-4"></div>
+            <div class="text-primary font-bold tracking-widest text-sm animate-pulse">INFINITY DIGITAL</div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed w-full z-50 glass transition-all duration-300 py-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <a href="#" class="flex items-center gap-2">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center font-bold text-xl shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+                        <i class="fas fa-infinity"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight">Infinity <span class="text-accent">Digital</span></span>
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#accueil" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Accueil</a>
+                    <a href="#formations" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Formations</a>
+                    <a href="#contact" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Contact</a>
+                    <a href="#inscription" class="bg-gradient-to-r from-primary to-accent text-white px-5 py-2 rounded-full font-medium text-sm hover:shadow-lg hover:shadow-primary/50 transition-all">
+                        S'inscrire
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden glass absolute top-full left-0 w-full border-t border-white/10">
+            <div class="px-4 py-4 flex flex-col space-y-4">
+                <a href="#accueil" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md font-medium mobile-link">Accueil</a>
+                <a href="#formations" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md font-medium mobile-link">Formations</a>
+                <a href="#contact" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md font-medium mobile-link">Contact</a>
+                <a href="#inscription" class="text-primary font-bold block px-3 py-2 rounded-md mobile-link">S'inscrire maintenant</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- SECTION 1: HERO -->
+    <section id="accueil" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <!-- Abstract Background Elements -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full mix-blend-screen filter blur-[100px] opacity-50 animate-pulse"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/20 rounded-full mix-blend-screen filter blur-[100px] opacity-50"></div>
+        
+        <!-- Background Overlay Pattern -->
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+            <div class="inline-block mb-4 px-4 py-1.5 rounded-full glass border-primary/30 text-accent text-xs font-semibold uppercase tracking-wider">
+                <i class="fas fa-rocket mr-2"></i> Propulsez votre carrière
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight">
+                Bienvenue chez <br/>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent glow-text">Infinity Digital</span>
+            </h1>
+            <p class="mt-4 text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-10 font-light leading-relaxed">
+                Centre de formation de référence en informatique, intelligence artificielle et business digital à Kinshasa.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#inscription" class="glow-button bg-gradient-to-r from-primary to-accent text-white px-8 py-4 rounded-full font-bold text-lg flex items-center justify-center gap-2">
+                    S'inscrire maintenant <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="#formations" class="glass text-white px-8 py-4 rounded-full font-medium text-lg hover:bg-white/10 transition flex items-center justify-center gap-2">
+                    Voir les formations
+                </a>
+            </div>
+            
+            <!-- Statistiques / Confiance -->
+            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto opacity-70">
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl font-bold text-white">500+</span>
+                    <span class="text-sm text-gray-400">Étudiants formés</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl font-bold text-white">100%</span>
+                    <span class="text-sm text-gray-400">Pratique</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl font-bold text-white">15+</span>
+                    <span class="text-sm text-gray-400">Formations</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl font-bold text-white"><i class="fas fa-star text-yellow-400"></i> 4.9</span>
+                    <span class="text-sm text-gray-400">Note moyenne</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: FORMATIONS -->
+    <section id="formations" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">Nos Formations <span class="text-accent">Premium</span></h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Développez des compétences d'avenir très demandées sur le marché du travail.</p>
+            </div>
+
+            <!-- Catégorie: Informatique -->
+            <div class="mb-16 reveal">
+                <h3 class="text-2xl font-semibold mb-8 flex items-center gap-3 border-b border-white/10 pb-4">
+                    <i class="fas fa-laptop-code text-primary p-3 rounded-lg bg-primary/10"></i> Informatique & Développement
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Carte Formation -->
+                    <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
+                        <div class="absolute top-4 right-4 bg-green-500/20 text-green-400 text-xs font-bold px-3 py-1 rounded-full border border-green-500/30">Gratuit</div>
+                        <i class="fab fa-windows text-4xl text-gray-400 mb-4 group-hover:text-primary transition"></i>
+                        <h4 class="text-xl font-bold mb-2">Initiation Windows</h4>
+                        <p class="text-sm text-gray-400 mb-4">Maîtrisez les bases de l'outil informatique et du système d'exploitation.</p>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-6 relative group">
+                        <div class="absolute top-4 right-4 bg-red-500/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full border border-red-500/30">Payant</div>
+                        <i class="fas fa-file-word text-4xl text-blue-500 mb-4 group-hover:scale-110 transition"></i>
+                        <h4 class="text-xl font-bold mb-2">Pack Office (Word, Excel, PPT)</h4>
+                        <p class="text-sm text-gray-400 mb-4">Devenez expert en bureautique pour l'administration et la gestion.</p>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-6 relative group">
+                        <div class="absolute top-4 right-4 bg-red-500/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full border border-red-500/30">Payant</div>
+                        <i class="fab fa-html5 text-4xl text-orange-500 mb-4 group-hover:scale-110 transition"></i>
+                        <h4 class="text-xl font-bold mb-2">HTML, CSS & Dev Web</h4>
+                        <p class="text-sm text-gray-400 mb-4">Créez vos propres sites internet de A à Z avec les technologies modernes.</p>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-6 relative group">
+                        <div class="absolute top-4 right-4 bg-red-500/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full border border-red-500/30">Payant</div>
+                        <i class="fab fa-python text-4xl text-yellow-400 mb-4 group-hover:scale-110 transition"></i>
+                        <h4 class="text-xl font-bold mb-2">Programmation Python</h4>
+                        <p class="text-sm text-gray-400 mb-4">Apprenez le langage le plus demandé au monde (automatisation, data, web).</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Catégorie: Business Digital -->
+            <div class="mb-16 reveal">
+                <h3 class="text-2xl font-semibold mb-8 flex items-center gap-3 border-b border-white/10 pb-4">
+                    <i class="fas fa-chart-line text-accent p-3 rounded-lg bg-accent/10"></i> Business Digital & E-commerce
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass-card rounded-2xl p-6 relative group">
+                        <div class="absolute top-4 right-4 bg-red-500/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full border border-red-500/30">Payant</div>
+                        <i class="fas fa-box-open text-4xl text-purple-400 mb-4 group-hover:scale-110 transition"></i>
+                        <h4 class="text-xl font-bold mb-2">Dropshipping</h4>
+                        <p class="text-sm text-gray-400 mb-4">Lancez un business e-commerce rentable sans gérer de stock physique.</p>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-6 relative group">
+                        <div class="absolute top-4 right-4 bg-red-500/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full border border-red-500/30">Payant</div>
+                        <i class="fab fa-tiktok text-4xl text-white mb-4 group-hover:scale-110 transition"></i>
+                        <h4 class="text-xl font-bold mb-2">TikTok Business & FB Ads</h4>
+                        <p class="text-sm text-gray-400 mb-4">Maîtrisez la publicité en ligne pour exploser vos ventes.</p>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-6 relative group">
+                        <div class="absolute top-4 right-4 bg-red-500/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full border border-red-500/30">Payant</div>
+                        <i class="fab fa-whatsapp text-4xl text-green-500 mb-4 group-hover:scale-110 transition"></i>
+                        <h4 class="text-xl font-bold mb-2">WhatsApp Business & Marketing</h4>
+                        <p class="text-sm text-gray-400 mb-4">Convertissez vos prospects en clients directement sur WhatsApp.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Catégorie: IA & Automatisation -->
+            <div class="reveal">
+                <h3 class="text-2xl font-semibold mb-8 flex items-center gap-3 border-b border-white/10 pb-4">
+                    <i class="fas fa-brain text-pink-500 p-3 rounded-lg bg-pink-500/10"></i> IA & Automatisation
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass-card rounded-2xl p-6 relative group">
+                        <div class="absolute top-4 right-4 bg-red-500/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full border border-red-500/30">Payant</div>
+                        <i class="fas fa-robot text-4xl text-emerald-400 mb-4 group-hover:scale-110 transition"></i>
+                        <h4 class="text-xl font-bold mb-2">Masterclass ChatGPT</h4>
+                        <p class="text-sm text-gray-400 mb-4">Utilisez l'IA pour décupler votre productivité et créer du contenu.</p>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-6 relative group">
+                        <div class="absolute top-4 right-4 bg-red-500/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full border border-red-500/30">Payant</div>
+                        <i class="fas fa-cogs text-4xl text-gray-300 mb-4 group-hover:scale-110 transition"></i>
+                        <h4 class="text-xl font-bold mb-2">Automatisation Business</h4>
+                        <p class="text-sm text-gray-400 mb-4">Créez des bots WhatsApp et automatisez vos processus de vente.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: FORMULAIRE D'INSCRIPTION -->
+    <section id="inscription" class="py-24 relative">
+        <div class="absolute inset-0 bg-primary/5 clip-path-slant z-0"></div>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 reveal">
+            
+            <div class="glass p-8 md:p-12 rounded-3xl border-t border-l border-white/20 shadow-2xl relative">
+                <!-- Compteur de places -->
+                <div class="absolute -top-5 right-5 bg-gradient-to-r from-red-500 to-pink-500 px-4 py-1.5 rounded-full text-xs font-bold shadow-lg animate-bounce flex items-center gap-2">
+                    <i class="fas fa-fire"></i> <span id="places-count">Plus que 12 places</span>
+                </div>
+
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Rejoignez-nous <span class="text-primary">Aujourd'hui</span></h2>
+                    <p class="text-gray-400">Remplissez le formulaire ci-dessous pour réserver votre place.</p>
+                </div>
+
+                <form id="registration-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Nom -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Nom</label>
+                            <input type="text" id="nom" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-white transition placeholder-gray-500" placeholder="Votre nom">
+                        </div>
+                        <!-- Post-nom -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Post-nom</label>
+                            <input type="text" id="postnom" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-white transition placeholder-gray-500" placeholder="Votre post-nom (optionnel)">
+                        </div>
+                        <!-- Prénom -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Prénom</label>
+                            <input type="text" id="prenom" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-white transition placeholder-gray-500" placeholder="Votre prénom">
+                        </div>
+                        <!-- Ville -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Ville de résidence</label>
+                            <input type="text" id="ville" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-white transition placeholder-gray-500" placeholder="Ex: Kinshasa">
+                        </div>
+                        <!-- Email -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Adresse Email</label>
+                            <input type="email" id="email" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-white transition placeholder-gray-500" placeholder="email@exemple.com">
+                        </div>
+                        <!-- Téléphone WhatsApp -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Numéro WhatsApp</label>
+                            <input type="tel" id="telephone" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-white transition placeholder-gray-500" placeholder="+243 ...">
+                        </div>
+                    </div>
+
+                    <!-- Choix Formation -->
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Choisissez votre formation</label>
+                        <select id="formation-select" required class="w-full bg-[#1A233A] border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-white transition appearance-none cursor-pointer">
+                            <option value="" disabled selected>-- Sélectionnez une option --</option>
+                            <option value="[ Gratuit ] Initiation Windows">[ Gratuit ] Initiation Windows</option>
+                            <option value="[ Gratuit ] HTML & CSS">[ Gratuit ] HTML & CSS</option>
+                            <option value="[ Payant ] Python Avancé">[ Payant ] Python Avancé</option>
+                            <option value="[ Payant ] Dropshipping Pro">[ Payant ] Dropshipping Pro</option>
+                            <option value="[ Payant ] Intelligence Artificielle">[ Payant ] Intelligence Artificielle</option>
+                            <option value="[ Payant ] Marketing Digital & FB Ads">[ Payant ] Marketing Digital & FB Ads</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 pt-8 text-gray-400">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+
+                    <!-- Affichage dynamique du statut de paiement -->
+                    <div id="payment-status" class="mt-4 p-4 rounded-xl glass hidden transition-all">
+                        <!-- Le contenu sera injecté via JS -->
+                    </div>
+
+                    <div class="text-sm text-gray-400 mt-4 flex items-start gap-2">
+                        <i class="fas fa-info-circle text-primary mt-1"></i>
+                        <p>IMPORTANT : Le paiement ne s'effectue PAS en ligne. <br> Il s'effectue physiquement au centre Infinity Digital après votre inscription.</p>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="w-full glow-button bg-gradient-to-r from-primary to-accent text-white py-4 rounded-xl font-bold text-lg mt-8 flex justify-center items-center gap-2">
+                        <span>Valider mon inscription</span>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                    
+                    <!-- Message de succès -->
+                    <div id="success-msg" class="hidden mt-4 bg-green-500/20 border border-green-500/30 text-green-400 p-4 rounded-xl text-center font-medium">
+                        <i class="fas fa-check-circle mr-2"></i> Inscription réussie ! Redirection vers WhatsApp...
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: CONTACT & MAP -->
+    <section id="contact" class="py-24 bg-black/20 border-t border-white/5 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">Contactez-<span class="text-primary">Nous</span></h2>
+                <p class="text-gray-400">Passez nous voir au centre ou discutez avec nous en ligne.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Info Contact -->
+                <div class="space-y-8">
+                    <div class="glass p-6 rounded-2xl flex items-start gap-4 border border-white/5 hover:border-primary/50 transition">
+                        <div class="bg-primary/20 p-4 rounded-xl text-primary text-2xl">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-1">Notre Adresse</h4>
+                            <p class="text-gray-400">Boulevard du 30 Juin, Gombe<br>Kinshasa, République Démocratique du Congo</p>
+                        </div>
+                    </div>
+
+                    <div class="glass p-6 rounded-2xl flex items-start gap-4 border border-white/5 hover:border-green-500/50 transition">
+                        <div class="bg-green-500/20 p-4 rounded-xl text-green-400 text-2xl">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-1">Téléphone / WhatsApp</h4>
+                            <a href="https://wa.me/243849291889" target="_blank" class="text-gray-400 hover:text-white transition">+243 849 291 889</a>
+                        </div>
+                    </div>
+
+                    <div class="glass p-6 rounded-2xl flex items-start gap-4 border border-white/5 hover:border-accent/50 transition">
+                        <div class="bg-accent/20 p-4 rounded-xl text-accent text-2xl">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-1">Email</h4>
+                            <a href="mailto:contact@infinitydigital.cd" class="text-gray-400 hover:text-white transition">contact@infinitydigital.cd</a>
+                        </div>
+                    </div>
+
+                    <div class="glass p-6 rounded-2xl flex items-start gap-4 border border-white/5 hover:border-purple-500/50 transition">
+                        <div class="bg-purple-500/20 p-4 rounded-xl text-purple-400 text-2xl">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-1">Heures d'ouverture</h4>
+                            <p class="text-gray-400">Lundi - Samedi : 08h00 - 18h00<br>Dimanche : Fermé</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Maps (Emplacement fictif centré sur Kinshasa/Gombe) -->
+                <div class="glass rounded-2xl p-2 border border-white/10 h-[450px] relative overflow-hidden">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3978.5085440703814!2d15.305987!3d-4.305963!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1a6a337774d6e903%3A0x8698bf0d35a0f128!2sBoulevard%20du%2030%20Juin%2C%20Kinshasa%2C%20R%C3%A9publique%20d%C3%A9mocratique%20du%20Congo!5e0!3m2!1sfr!2sfr!4v1700000000000!5m2!1sfr!2sfr" 
+                        class="w-full h-full rounded-xl filter invert-[90%] hue-rotate-[180deg] contrast-100 opacity-80" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 pt-16 pb-8 bg-[#0a101d]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fas fa-infinity text-primary text-2xl"></i>
+                        <span class="font-bold text-2xl">Infinity <span class="text-accent">Digital</span></span>
+                    </div>
+                    <p class="text-gray-400 text-sm max-w-sm mb-6 leading-relaxed">
+                        Le futur se construit aujourd'hui. Rejoignez le centre de formation leader en RDC pour propulser votre carrière dans la tech et le business digital.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-primary/20 hover:text-primary transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-primary/20 hover:text-primary transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-primary/20 hover:text-primary transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-primary/20 hover:text-primary transition"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Liens Rapides</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#accueil" class="hover:text-primary transition">Accueil</a></li>
+                        <li><a href="#formations" class="hover:text-primary transition">Nos Formations</a></li>
+                        <li><a href="#inscription" class="hover:text-primary transition">S'inscrire</a></li>
+                        <li><a href="#contact" class="hover:text-primary transition">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Légal</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-primary transition">Conditions d'utilisation</a></li>
+                        <li><a href="#" class="hover:text-primary transition">Politique de confidentialité</a></li>
+                        <li><a href="#" class="hover:text-primary transition">Mentions légales</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 pt-8 text-center text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center">
+                <p>&copy; 2026 Infinity Digital. Tous droits réservés.</p>
+                <p class="mt-2 md:mt-0">Fait avec <i class="fas fa-heart text-red-500 mx-1"></i> à Kinshasa</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/243849291889" target="_blank" class="fixed bottom-6 right-6 w-14 h-14 bg-green-500 rounded-full text-white flex items-center justify-center text-3xl shadow-[0_0_20px_rgba(34,197,94,0.5)] hover:scale-110 hover:bg-green-400 transition z-50 animate-bounce">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- SCRIPTS JAVASCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            /* --- Loader --- */
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 500);
+            }, 1000);
+
+            /* --- Navbar Scroll Effect & Mobile Menu --- */
+            const navbar = document.getElementById('navbar');
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-[#0F172A]/90', 'shadow-lg');
+                    navbar.classList.remove('py-4');
+                    navbar.classList.add('py-2');
+                } else {
+                    navbar.classList.remove('bg-[#0F172A]/90', 'shadow-lg');
+                    navbar.classList.add('py-4');
+                    navbar.classList.remove('py-2');
+                }
+            });
+
+            mobileBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            /* --- Scroll Animations (Intersection Observer) --- */
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            const revealCallback = (entries, observer) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            };
+
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealObserver = new IntersectionObserver(revealCallback, revealOptions);
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            /* --- Dynamic Form Status --- */
+            const selectFormation = document.getElementById('formation-select');
+            const paymentStatusBox = document.getElementById('payment-status');
+
+            selectFormation.addEventListener('change', (e) => {
+                const val = e.target.value;
+                paymentStatusBox.classList.remove('hidden');
+                
+                if(val.includes('[ Gratuit ]')) {
+                    paymentStatusBox.className = 'mt-4 p-4 rounded-xl border border-green-500/30 bg-green-500/10 text-green-400 transition-all';
+                    paymentStatusBox.innerHTML = '<div class="flex items-center gap-3"><i class="fas fa-check-circle text-xl"></i> <div><p class="font-bold">Formation 100% Gratuite</p><p class="text-sm opacity-80">Aucun frais ne vous sera demandé.</p></div></div>';
+                } else if(val.includes('[ Payant ]')) {
+                    paymentStatusBox.className = 'mt-4 p-4 rounded-xl border border-yellow-500/30 bg-yellow-500/10 text-yellow-400 transition-all';
+                    paymentStatusBox.innerHTML = '<div class="flex items-center gap-3"><i class="fas fa-credit-card text-xl"></i> <div><p class="font-bold">Formation Payante</p><p class="text-sm text-gray-300">💳 Le paiement s\'effectue physiquement au centre Infinity Digital après inscription.</p></div></div>';
+                }
+            });
+
+            /* --- Form Submission & EmailJS & WhatsApp --- */
+            const form = document.getElementById('registration-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const successMsg = document.getElementById('success-msg');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // UX: Loading state
+                const originalBtnText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Traitement en cours...';
+                submitBtn.disabled = true;
+
+                // Récupération des données
+                const nom = document.getElementById('nom').value;
+                const postnom = document.getElementById('postnom').value;
+                const prenom = document.getElementById('prenom').value;
+                const ville = document.getElementById('ville').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('telephone').value;
+                const formation = selectFormation.value;
+
+                // Préparation des paramètres pour EmailJS
+                const templateParams = {
+                    from_name: `${nom} ${postnom} ${prenom}`,
+                    to_name: "Infinity Digital Admin",
+                    phone: phone,
+                    email: email,
+                    ville: ville,
+                    formation: formation
+                };
+
+                // NOTE: Remplacez "VOTRE_SERVICE_ID" et "VOTRE_TEMPLATE_ID" par vos vrais IDs EmailJS
+                // Bloc try/catch simulé (car EmailJS n'est pas configuré avec une vraie clé ici)
+                
+                // Simulation d'envoi Email (Pour que le code fonctionne en démo)
+                setTimeout(() => {
+                    /* DÉCOMMENTER CE BLOC UNE FOIS EMAILJS CONFIGURÉ :
+                    emailjs.send('VOTRE_SERVICE_ID', 'VOTRE_TEMPLATE_ID', templateParams)
+                        .then(function(response) {
+                           console.log('SUCCESS!', response.status, response.text);
+                        }, function(error) {
+                           console.log('FAILED...', error);
+                        });
+                    */
+
+                    // Afficher message succès
+                    successMsg.classList.remove('hidden');
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> Terminé';
+                    
+                    // Générer message WhatsApp
+                    const whatsappNumber = "243849291889";
+                    const message = `Bonjour Infinity Digital 👋%0AJe viens de m'inscrire sur le site.%0A%0A👤 Nom : ${nom} ${prenom}%0A📚 Formation : ${formation}%0A📍 Ville : ${ville}%0A%0AJe souhaite finaliser mon inscription.`;
+                    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
+
+                    // Redirection après 2 secondes
+                    setTimeout(() => {
+                        window.open(whatsappUrl, '_blank');
+                        // Reset form
+                        form.reset();
+                        paymentStatusBox.classList.add('hidden');
+                        submitBtn.innerHTML = originalBtnText;
+                        submitBtn.disabled = false;
+                        successMsg.classList.add('hidden');
+                    }, 2000);
+
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+</html>
